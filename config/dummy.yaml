@@ -1,0 +1,44 @@
+mode: dummy  # no downloads, no API calls -- synthetic data throughout
+
+data:
+  raw_dir: data/raw
+  processed_dir: data/processed
+  cic_ids2018:
+    dir: data/raw/cic_ids2018
+  cloudtrail:
+    dir: data/raw/cloudtrail
+    distributions_cache: data/processed/iam_distributions.pkl
+  threat_intel:
+    abuseipdb_key: ""
+    otx_key: ""
+    cache_dir: data/processed/ti_cache
+    cache_ttl_hours: 0
+
+benchmark:
+  bucket_minutes: 5
+  iam_max_seq_len: 64
+  iam_event_dim: 5
+  flow_dim: 12
+  ti_dim: 16
+
+  scenario:
+    benign_ratio: 0.15
+    single_ratio: 0.25
+    dual_ratio:   0.35
+    tri_ratio:    0.25
+
+  split:
+    train: 0.70
+    val:   0.10
+    test:  0.20
+
+  severity_classes:
+    - informational
+    - medium
+    - high
+    - critical
+
+dummy:
+  n_buckets: 2000
+
+random_seed: 42

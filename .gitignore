@@ -1,0 +1,26 @@
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+data/raw/
+data/processed/
+data/processed_temporal/
+checkpoints/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+*.log
+.pytest_cache/
+
+# OS / editor cruft
+.DS_Store
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+results/*.txt          # ad-hoc eval logs; keep results/*.json tracked
+
+# Tracked on purpose: results/*.json (final evaluation outputs) and RESULTS.md

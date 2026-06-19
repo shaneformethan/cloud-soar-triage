@@ -1,0 +1,48 @@
+mode: real  # real | dummy
+
+data:
+  raw_dir: data/raw
+  processed_dir: data/processed
+
+  cic_ids2018:
+    dir: data/raw/cic_ids2018
+
+  cloudtrail:
+    dir: data/raw/cloudtrail
+    distributions_cache: data/processed/iam_distributions.pkl
+
+  threat_intel:
+    abuseipdb_key: ""   # or set env var ABUSEIPDB_KEY
+    otx_key: ""         # or set env var OTX_KEY
+    cache_dir: data/processed/ti_cache
+    cache_ttl_hours: 24
+
+benchmark:
+  bucket_minutes: 5
+
+  # Section III-B exact dimensions
+  iam_max_seq_len: 64
+  # DESIGN DECISION: 5 features per IAM event token
+  # [action_type_idx, resource_type_idx, principal_role_idx, src_ip_region_idx, is_in_baseline]
+  iam_event_dim: 5
+  flow_dim: 12
+  ti_dim: 16
+
+  scenario:
+    single_ratio: 0.30
+    dual_ratio:   0.40
+    tri_ratio:    0.30
+
+  split:
+    train: 0.70
+    val:   0.10
+    test:  0.20
+
+  # 4-class severity: index 0–3
+  severity_classes:
+    - informational   # 0
+    - medium          # 1
+    - high            # 2
+    - critical        # 3
+
+random_seed: 42

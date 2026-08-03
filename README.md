@@ -1,18 +1,28 @@
-# What Matters in Multi-Modal Cloud Incident Triage?
+# Which Design Choices Matter in Multi-Modal Cloud Incident Triage?
 
-Code and benchmark for the paper *"What Matters in Multi-Modal Cloud Incident
-Triage? A Benchmark and Comparative Study for SOAR Alert-Fatigue Reduction"*
-(target venue: ICITACEE 2026).
+Code and benchmark for the paper *"Which Design Choices Matter in Multi-Modal
+Cloud Incident Triage? A Reproducible Benchmark and Controlled Comparison"*
+(under review).
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 This is an **empirical/comparative study**, not a single proposed model. It
 provides (1) a semi-synthetic multimodal benchmark, (2) a simulated
-SOAR-integrated evaluation protocol, and (3) a systematic comparison of 17
-configurations under two regimes. The headline finding: for this task,
-**modality coverage, calibration, and robustness to temporal drift matter; the
-fusion mechanism does not** (candidate fusion architectures are statistically
-equivalent — ANOVA p=0.14, pairwise TOST within ±0.01).
+confidence-routing protocol, and (3) a controlled comparison of 20
+configurations under two regimes.
+
+Two findings carry the paper:
+
+- **Modality coverage dominates the fusion mechanism.** Identity and network
+  evidence together are necessary and close to sufficient. The three
+  early-fusion mechanisms are equivalent within ±0.01 weighted F1 (ANOVA
+  p=0.14; TOST p=0.002), and moving fusion *after* the classifier (soft voting)
+  costs 0.034 rather than helping.
+- **Under temporal drift the ranking depends on the metric.** Gradient boosting
+  has the best weighted F1 (0.848 vs 0.822, p=0.0001) but loses 0.139 of
+  critical-class recall to the best deep variant (p<0.0001). No configuration
+  wins on both. Selecting a model on weighted F1 alone ships the one that misses
+  roughly one critical incident in two.
 
 See **[RESULTS.md](RESULTS.md)** for the full result tables and
 **[DRAFT_ALIGNMENT.md](DRAFT_ALIGNMENT.md)** for how the code maps to the paper.
@@ -61,7 +71,7 @@ python scripts/build_benchmark_semi.py --temporal-split \
        --processed_dir data/processed_temporal                   # temporal split
 ```
 
-## Run the comparison (17 configs × 5 seeds)
+## Run the comparison (17 tuned configs × 5 seeds)
 
 ```bash
 python scripts/multiseed_runner.py --seeds 42 43 44 45 46 --device cuda
@@ -69,6 +79,9 @@ python scripts/multiseed_runner.py --seeds 42 43 44 45 46 --device cuda
 
 python scripts/make_results.py     # regenerate RESULTS.md from the JSONs
 python scripts/make_table.py       # LaTeX results table for the paper
+
+# External late-fusion baseline (soft voting), CPU-only, ~2 min
+python scripts/soft_voting_baseline.py
 ```
 
 ## Real-data validation (raw CIC flows, temporal split)
@@ -104,12 +117,20 @@ results/       multiseed_iid.json  multiseed_temporal.json
 train.py  main.py
 ```
 
-## Configurations compared (17)
+## Configurations compared (20)
 
-Cross-modal attention (z_fuse), IAM-priority fusion, Arch-A/B/C/D (BiLSTM, BiGRU,
-1D-CNN, Transformer w/o positional encoding), Arch-E/F (concat, average pooling),
-6 modality subsets, Random Forest, XGBoost, and DeepCASE (external, out-of-regime
+**17 tuned configurations** (`scripts/multiseed_runner.py`): cross-modal
+attention (z_fuse), IAM-priority fusion, Arch-A/B/C/D (BiLSTM, BiGRU, 1D-CNN,
+Transformer w/o positional encoding), Arch-E/F (concat, average pooling), 6
+modality subsets, Random Forest, XGBoost, and DeepCASE (external, out-of-regime
 sanity reference).
+
+**3 fusion-stage arms** (`scripts/soft_voting_baseline.py`): soft voting,
+weighted voting, and an early-fusion control. These use fixed hyperparameters
+rather than the search above. The base learner is held identical across all
+three so that the only quantity varying between them is where the modalities
+meet; the control is untuned on exactly the same terms, which keeps the
+early-versus-late comparison internally fair.
 
 ## Selected hyperparameters
 
@@ -122,14 +143,13 @@ epochs with early stopping (patience 10), ReduceLROnPlateau, Xavier init, d=256,
 ## Citation
 
 ```bibtex
-@inproceedings{formethan2026cloudtriage,
-  title     = {What Matters in Multi-Modal Cloud Incident Triage? A Benchmark
-               and Comparative Study for SOAR Alert-Fatigue Reduction},
-  author    = {Formethan, Shane M. R. and Wilson and Chowanda, Andry and
-               Junior, Franz Adeta},
-  booktitle = {2026 13th International Conference on Information Technology,
-               Computer, and Electrical Engineering (ICITACEE)},
-  year      = {2026}
+@misc{formethan2026cloudtriage,
+  title  = {Which Design Choices Matter in Multi-Modal Cloud Incident Triage?
+            A Reproducible Benchmark and Controlled Comparison},
+  author = {Formethan, Shane M. R. and Wilson and Chowanda, Andry and
+            Junior, Franz Adeta},
+  year   = {2026},
+  note   = {Under review}
 }
 ```
 

@@ -137,7 +137,7 @@ is no longer on the benchmark-build path.
 ### 3e. §IV Results
 Fill once training completes. The headline comparison comes from
 `python scripts/eval_existing.py` (curated subset) or the full sweep
-`python scripts/multiseed_runner.py --seeds 42 43 44 45 46` (17 configs × 5
+`python scripts/multiseed_runner.py --seeds 42 43 44 45 46` (17 tuned configs × 5
 seeds → mean ± std).
 
 ---

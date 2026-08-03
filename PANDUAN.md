@@ -196,7 +196,7 @@ Di akhir, tercetak **tabel ringkasan** semua model:
 
 `python main.py` sekarang mengevaluasi **17 konfigurasi**: proposed, 6 arsitektur
 ablation (arch_a–arch_f), 6 modality-subset ablation, iam_priority, trad_rf,
-trad_xgb, dan deepcase — sesuai klaim "17 configurations" di draft §IV.
+trad_xgb, dan deepcase — sesuai klaim "17 tuned configurations" di draft §III (ditambah 3 lengan fusion-stage di scripts/soft_voting_baseline.py).
 Checkpoint yang belum ada akan otomatis di-training.
 
 ---

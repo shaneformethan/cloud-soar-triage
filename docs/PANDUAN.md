@@ -4,10 +4,10 @@ Semua perintah dijalankan dari dalam folder `cloud-soar-triage\` menggunakan **W
 
 ---
 
-## 0. Benchmark Semi-Sintetik (Draft §III-E) — WAJIB BACA
+## 0. Benchmark Semi-Sintetik (Section III, "Data sources") — WAJIB BACA
 
 Benchmark utama paper dibangun oleh `scripts/build_benchmark_semi.py`, sesuai
-deskripsi draft §III-E ("Dataset Sources and Characteristics"):
+deskripsi Section III ("Dataset Sources and Characteristics"):
 
 - **Flow** : fitur 12-dim **nyata** dari CSE-CIC-IDS2018. Label serangan
   dipetakan langsung ke severity (`src/benchmark/severity_mapping.py`):
@@ -38,7 +38,7 @@ python scripts/build_benchmark_semi.py --n 9000 --seed 42 --rebuild-pool
 
 Setelah benchmark dibangun, lanjut ke training/evaluasi seperti biasa
 (Bagian 4–5). Untuk evaluasi cepat hanya dari checkpoint yang sudah ada
-(tanpa melatih ulang 17 konfigurasi): `python scripts/eval_existing.py`.
+(tanpa melatih ulang 20 konfigurasi (17 ter-tuning + 3 lengan fusion-stage)): `python scripts/eval_existing.py`.
 
 ---
 
@@ -194,7 +194,7 @@ Di akhir, tercetak **tabel ringkasan** semua model:
 ══════════════════════════════════════════════════════════════════════
 ```
 
-`python main.py` sekarang mengevaluasi **17 konfigurasi**: proposed, 6 arsitektur
+`python main.py` sekarang mengevaluasi **20 konfigurasi (17 ter-tuning + 3 lengan fusion-stage)**: proposed, 6 arsitektur
 ablation (arch_a–arch_f), 6 modality-subset ablation, iam_priority, trad_rf,
 trad_xgb, dan deepcase — sesuai klaim "17 tuned configurations" di draft §III (ditambah 3 lengan fusion-stage di scripts/soft_voting_baseline.py).
 Checkpoint yang belum ada akan otomatis di-training.
@@ -214,17 +214,17 @@ Setiap trial training cepat (15 epoch, patience 3) lalu diranking berdasarkan
 val weighted F1. Hasil terbaik disimpan ke `config/best_hp.json`. Catatan:
 IAM sequence length (32/64/128) TIDAK termasuk pencarian ini karena memerlukan
 rebuild benchmark — dimensi ini ditangani terpisah sebagai sensitivity
-analysis §IV-C.
+analysis Section IV-C.
 
 ---
 
-## 5c. Multi-Seed Runner (17 konfigurasi × 5 seed = 85 run)
+## 5c. Multi-Seed Runner (20 konfigurasi (17 ter-tuning + 3 lengan fusion-stage) × 5 seed = 85 run)
 
 ```powershell
 python scripts/multiseed_runner.py --seeds 42 43 44 45 46
 ```
 
-Menjalankan training + evaluasi untuk semua 17 konfigurasi pada 5 seed,
+Menjalankan training + evaluasi untuk semua 20 konfigurasi (17 ter-tuning + 3 lengan fusion-stage) pada 5 seed,
 lalu mencetak tabel ringkasan **mean ± std** dan menyimpan hasil lengkap ke
 `results/multiseed_results.json`. Untuk uji cepat, kurangi epoch dan/atau seed:
 

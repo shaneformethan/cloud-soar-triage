@@ -1,6 +1,6 @@
-# Menjalankan 17 konfigurasi × 5 seed di Google Colab (GPU)
+# Menjalankan 20 konfigurasi (17 ter-tuning + 3 lengan fusion-stage) × 5 seed di Google Colab (GPU)
 
-Panduan untuk menjalankan tabel §IV penuh (`scripts/multiseed_runner.py`) di
+Panduan untuk menjalankan tabel Section IV penuh (`scripts/multiseed_runner.py`) di
 Colab dengan GPU. **Resumable**: hasil disimpan ke Google Drive tiap selesai
 satu run, jadi kalau Colab terputus tinggal jalankan ulang sel **Run**.
 
@@ -78,7 +78,7 @@ Setelah selesai, unduh `results/multiseed_results.json` dari Drive. Isinya:
   FP-suppression, FNR, MTTD.
 - `raw`: laporan lengkap per (konfigurasi, seed).
 
-Pakai angka `summary` untuk mengisi Tabel §IV (mean ± std).
+Pakai angka `summary` untuk mengisi Tabel Section IV (mean ± std).
 
 ---
 

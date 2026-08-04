@@ -24,8 +24,9 @@ Two findings carry the paper:
   wins on both. Selecting a model on weighted F1 alone ships the one that misses
   roughly one critical incident in two.
 
-See **[RESULTS.md](RESULTS.md)** for the full result tables and
-**[DRAFT_ALIGNMENT.md](DRAFT_ALIGNMENT.md)** for how the code maps to the paper.
+See **[RESULTS.md](RESULTS.md)** for the full result tables.
+Run instructions in Indonesian are in [docs/PANDUAN.md](docs/PANDUAN.md); the
+Colab workflow is in [docs/COLAB_GUIDE.md](docs/COLAB_GUIDE.md).
 
 ---
 
@@ -40,7 +41,7 @@ Each sample is a 5-minute *event cluster* aligning three modalities:
 | Threat intel | **Real** AbuseIPDB + AlienVault OTX reputation of curated IPs, queried once and cached (binary) | (16,) float |
 
 Severity classes: 0 informational, 1 medium, 2 high, 3 critical.
-Integrity controls (see DRAFT_ALIGNMENT.md): no label leakage into generation
+Integrity controls: no label leakage into generation
 (anti-circularity), split-disjoint flow/TI pools (no train/test feature leakage),
 and an optional per-class **temporal** split of the real flows.
 
